@@ -31,13 +31,13 @@ def translate_text(text, from_lang='ja', to_lang='en'):
         'X-ClientTraceId': str(uuid.uuid4())
     }
 
-    body = [{'text': text}]
+    body = [{'text': word} for word in text]
 
     request = requests.post(constructed_url, params=params, headers=headers, json=body)
     response = request.json()
 
-    translated_text = response[0]['translations'][0]['text']
-    return translated_text
+    translated_words = [translation['translations'][0]['text'] for translation in response]
+    return translated_words
 
 '''
 # Example usage:
