@@ -13,7 +13,7 @@ For manga, its kinda weird
 '''
 
 def detect_text(path):
-    """Detects text in the file."""
+    """ Detects text in the file."""
     from google.cloud import vision
 
     client = vision.ImageAnnotatorClient()
@@ -26,13 +26,28 @@ def detect_text(path):
     texts = response.text_annotations
 
     print("Texts:")
-    print(texts[0].description)
-    return texts[0].description
+    #print(texts[0].description)
+    text_arr = []
+    for line in texts[0].description.splitlines():
+        if line:  # Add check to avoid empty lines
+            text_arr.append(line)
+    return text_arr
+  
 
-extracted_text=detect_text("./images/ja-4.jpg")
 
-''' Call function from translator.py file '''
-print(translate_text(extracted_text))
+extracted_text=detect_text("./images/irl/irl2.jpeg")
+#print(extracted_text)
 
+''' returns array of translated text '''
+translated_words= (translate_text(extracted_text))
+
+
+''' since extracted text and translated words are at the same indice, make dict with ext:trans'''
+
+if len(translated_words) == len(extracted_text):
+  translation_dict = {i: j for i, j in zip(extracted_text, translated_words)}    
+else:
+    print("Lengths of extracted text and translated words do not match.")
+print(translation_dict)
 
 
